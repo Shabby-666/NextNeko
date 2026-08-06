@@ -59,9 +59,9 @@ public class NightEffectsListener implements Listener {
                 player.removePotionEffect(VersionUtils.getJumpBoostEffect());
             } else {
                 int level = calculateEffectLevel(time, startTime, endTime, peakTime, maxLevel);
-                player.addPotionEffect(new PotionEffect(VersionUtils.getNightVisionEffect(), 300, 0, false, true));
-                player.addPotionEffect(new PotionEffect(VersionUtils.getSpeedEffect(), 300, level - 1, false, true));
-                player.addPotionEffect(new PotionEffect(VersionUtils.getJumpBoostEffect(), 300, level - 1, false, true));
+                player.addPotionEffect(new PotionEffect(VersionUtils.getNightVisionEffect(), 300, 0, false, false));
+                player.addPotionEffect(new PotionEffect(VersionUtils.getSpeedEffect(), 300, level - 1, false, false));
+                player.addPotionEffect(new PotionEffect(VersionUtils.getJumpBoostEffect(), 300, level - 1, false, false));
             }
         }
     }

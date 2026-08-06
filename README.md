@@ -372,29 +372,13 @@ The plugin creates a `config.yml` file on first run, which you can open and modi
 - `night-effects`: Night ability settings
   - `nightvision-duration`: Night vision duration in seconds (default 15), looped at night and removed during the day
 
-## How to Compile the Plugin (For Developers Who Want to Build the Plugin)
+## How to Build
 
-If you want to compile the plugin file yourself, you can follow these steps:
-
-#### For Minecraft 1.20.4 (Default Version)
-
-Open command line and enter:
 ```bash
-mvn clean install
+mvn clean package
 ```
 
-#### For Minecraft 1.21.4
-
-**Important Note: You need to install Java 21 on your computer first**
-Open command line and enter:
-```bash
-mvn clean install -Ppaper-1.21.4
-```
-
-#### Current Limitations
-
-- If your computer uses Java 17, you can only compile the 1.20.4 version
-- To compile the 1.21.4 version, you need to install Java 21 first
+The built jar supports Minecraft 1.20.1 to the latest version. Requires Java 21+.
 
 ### PlaceholderAPI Support
 
@@ -836,26 +820,10 @@ cat-nip:
   - `nightvision-duration`: 夜视效果持续时间（秒），夜间循环刷新，白天移除
   - `check-interval`: 效果检查间隔（秒）
 
-## 如何编译插件（适合想自己构建插件的开发者）
+## 如何构建
 
-如果您想要自己编译插件文件，可以按照以下步骤操作：
-
-#### 对于 Minecraft 1.20.4（默认版本）
-
-打开命令行，输入：
 ```bash
-mvn clean install
+mvn clean package
 ```
 
-#### 对于 Minecraft 1.21.4
-
-**重要提示：您需要先在电脑上安装 Java 21**
-打开命令行，输入：
-```bash
-mvn clean install -Ppaper-1.21.4
-```
-
-#### 当前限制
-
-- 如果您的电脑使用的是 Java 17，您只能编译 1.20.4 版本
-- 要编译 1.21.4 版本，您需要先安装 Java 21
+构建出的 jar 支持 Minecraft 1.20.1 到最新版。需要 Java 21+。

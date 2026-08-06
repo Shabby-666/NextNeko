@@ -14,12 +14,14 @@ import org.cneko.nekox.NextNeko;
 import org.cneko.nekox.utils.LanguageManager;
 import org.cneko.nekox.utils.NekoManager;
 import org.cneko.nekox.utils.SafeMessageUtils;
+import org.cneko.nekox.utils.SafeMessageUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Climb implements CommandExecutor, TabCompleter {
+    private final NextNeko plugin;
     private final NekoManager nekoManager;
     private final LanguageManager languageManager;
     
@@ -27,6 +29,7 @@ public class Climb implements CommandExecutor, TabCompleter {
     private final HashMap<String, Boolean> climbStatus = new HashMap<>();
     
     public Climb(NextNeko plugin) {
+        this.plugin = plugin;
         this.nekoManager = plugin.getNekoManager();
         this.languageManager = plugin.getLanguageManager();
     }
@@ -106,11 +109,9 @@ public class Climb implements CommandExecutor, TabCompleter {
      * 应用爬墙效果（漂浮效果）
      */
     public void applyClimbingEffect(Player player) {
-        // 移除旧的效果
+        int duration = plugin.getConfig().getInt("neko-climbing.max-levitation-duration", 180) * 20;
         player.removePotionEffect(PotionEffectType.LEVITATION);
-        
-        // 添加漂浮效果（LEVITATION V，持续40tick）
-        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 40, 4, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, duration, 4, false, false));
     }
     
     /**

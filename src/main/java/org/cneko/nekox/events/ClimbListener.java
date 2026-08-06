@@ -60,10 +60,13 @@ public class ClimbListener implements Listener {
             
             // 检查玩家是否在墙上并且正在尝试向上移动
             if (isPlayerOnWall(player) && player.isSprinting()) {
-                // 应用爬墙效果（漂浮）
-                climbCommand.applyClimbingEffect(player);
+                // 检查前方是否是空气或脚下有方块（有立足点），如果是则清除漂浮
+                if (isWallInFront(player) && !isStandingOnGround(player)) {
+                    climbCommand.applyClimbingEffect(player);
+                } else {
+                    climbCommand.removeClimbingEffect(player);
+                }
             } else if (!isMovingUpwards(event)) {
-                // 只有当玩家不向上移动时才移除效果
                 climbCommand.removeClimbingEffect(player);
             }
         } catch (Exception e) {
@@ -165,5 +168,13 @@ public class ClimbListener implements Listener {
         
         // 检查该方块是否为实心方块
         return blockBelowFront.getType().isSolid();
+    }
+    
+    /**
+     * 检查玩家是否站在实体方块上（有立足点）
+     */
+    private boolean isStandingOnGround(Player player) {
+        Block blockBelow = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
+        return blockBelow.getType().isSolid();
     }
 }
