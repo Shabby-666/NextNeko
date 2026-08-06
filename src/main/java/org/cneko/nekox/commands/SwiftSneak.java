@@ -1,0 +1,94 @@
+package org.cneko.nekox.commands;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.cneko.nekox.NextNeko;
+import org.cneko.nekox.utils.LanguageManager;
+import org.cneko.nekox.utils.NekoManager;
+import org.cneko.nekox.utils.SafeMessageUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class SwiftSneak implements CommandExecutor, TabCompleter {
+    private final NextNeko plugin;
+    private final NekoManager nekoManager;
+    private final LanguageManager languageManager;
+    
+    public SwiftSneak(NextNeko plugin) {
+        this.plugin = plugin;
+        this.nekoManager = plugin.getNekoManager();
+        this.languageManager = plugin.getLanguageManager();
+    }
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (args.length == 0) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("§c" + SafeMessageUtils.getSafeMessage(languageManager, "commands.only_player", "Only players can use this command!"));
+                return true;
+            }
+            
+            Player player = (Player) sender;
+            
+            // 检查玩家是否是猫娘
+            if (!nekoManager.isNeko(player)) {
+                player.sendMessage("§c" + SafeMessageUtils.getSafeMessage(languageManager, "commands.health.notneko", "You are not a neko!"));
+                return true;
+            }
+            
+            applySwiftSneak(player);
+            return true;
+        }
+        
+        Player target = plugin.getServer().getPlayer(args[0]);
+        if (target == null) {
+            sender.sendMessage("§c" + SafeMessageUtils.getSafeMessage(languageManager, "commands.player_not_found", "Player not found!"));
+            return true;
+        }
+        
+        // 检查目标玩家是否是猫娘
+        if (!nekoManager.isNeko(target)) {
+            sender.sendMessage("§c" + SafeMessageUtils.getSafeMessage(languageManager, "commands.health.notneko", "Target player is not a neko!"));
+            return true;
+        }
+        
+        applySwiftSneak(target);
+        if (sender instanceof Player && sender != target) {
+            HashMap<String, String> replacements = new HashMap<>();
+            replacements.put("player", target.getName());
+            String message = SafeMessageUtils.getSafeMessage(languageManager, "commands.pat.success", "You patted {player}!");
+            sender.sendMessage("§e" + SafeMessageUtils.replacePlaceholdersSafe(message, replacements));
+        }
+        
+        return true;
+    }
+    
+    private void applySwiftSneak(Player player) {
+        // 注意：Swift Sneak是Minecraft 1.19+的效果，可能需要检查服务器版本兼容性
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3000, 1, false, false));
+        player.sendMessage("§e" + SafeMessageUtils.getSafeMessage(languageManager, "commands.swiftsneak.success", "Swift Sneak effect applied!"));
+    }
+    
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> completions = new ArrayList<>();
+        
+        if (args.length == 1) {
+            // 提供在线玩家列表补全
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+                    completions.add(player.getName());
+                }
+            }
+        }
+        
+        return completions;
+    }
+}

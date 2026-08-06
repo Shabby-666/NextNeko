@@ -1,0 +1,163 @@
+# NextNeko插件配置文件
+
+# 猫娘聊天功能设置
+neko-chat:
+  enabled: true
+  # 聊天前缀
+  prefix: "§6[猫娘] §f"
+  # 聊天后缀
+  suffix: " §6喵~"
+  # 关键字替换规则（将左侧的词替换为右侧的词）
+  keyword-replace:
+    "的": "滴~"
+    "了": "辽~"
+    "是": "素~"
+
+# 只吃肉类设置
+meat-only:
+  enabled: true
+  # 允许食用的肉类列表
+  allowed-foods:
+    - "COOKED_BEEF"
+    - "BEEF"
+    - "COOKED_CHICKEN"
+    - "CHICKEN"
+    - "COOKED_PORKCHOP"
+    - "PORKCHOP"
+    - "COOKED_MUTTON"
+    - "MUTTON"
+    - "RABBIT"
+    - "COOKED_RABBIT"
+    - "COD"
+    - "COOKED_COD"
+    - "SALMON"
+    - "COOKED_SALMON"
+    - "TROPICAL_FISH"
+    - "PUFFERFISH"
+    - "ROTTEN_FLESH"
+    - "POTION"
+    - "SPLASH_POTION"
+    - "LINGERING_POTION"
+    - "OMINOUS_BOTTLE"
+
+# 猫薄荷设置
+cat-nip:
+  enabled: true
+  # 猫薄荷物品ID
+  item: "WHEAT_SEEDS"
+  # 效果持续时间(秒)
+  duration: 60
+
+# 猫爪设置
+claws:
+  enabled: true
+  # 猫爪伤害加成
+  damage-bonus: 2.0
+  # 冷却时间(秒)
+  cooldown: 10
+
+# 生物目标设置
+mob-targeting:
+  enabled: true
+  # 敌对生物目标距离增加
+  distance-increase: 2.0
+  # 友好生物更亲近
+  friendly-attraction: true
+
+# 护甲加成设置
+armor-bonus:
+  enabled: true
+  # 皮革护甲加成
+  leather-bonus:
+    - "LEATHER_HELMET"
+    - "LEATHER_CHESTPLATE"
+    - "LEATHER_LEGGINGS"
+    - "LEATHER_BOOTS"
+  # 每穿一件皮革护甲获得的速度加成
+  speed-bonus-per-piece: 0.03
+
+# 命令设置
+commands:
+  # 是否启用所有命令
+  enabled: true
+
+# 主人死亡功能设置
+owner-death:
+  feature:
+    # 是否启用主人死亡时猫娘也死亡的功能
+    enabled: true
+  # 猫娘死亡时是否保留物品栏
+  keep-inventory: true
+  # 猫娘死亡时是否保留等级经验
+  keep-level: true
+
+# 健康恢复技能设置
+health-skill:
+  # 技能冷却时间(秒)
+  cooldown: 60
+  # 每次使用扣除的饱食度
+  hunger-cost: 4
+  # 最大恢复等级
+  max-level: 5
+
+# 夜间效果设置
+night-effects:
+  # 是否启用夜间效果功能
+  enabled: true
+  # 效果开始时间(游戏时间)
+  start-time: 13000
+  # 效果结束时间(游戏时间)
+  end-time: 23000
+  # 效果最强时间(游戏时间)
+  peak-time: 18000
+  # 效果检查间隔(秒)
+  check-interval: 3
+  # 最大效果等级
+  max-level: 5
+  # 夜视效果持续时间(秒)，夜间会循环刷新该效果，白天则移除
+  nightvision-duration: 15
+
+# 被动攻击增强设置
+passive-attack-boost:
+  # 是否启用被动攻击增强功能
+  enabled: true
+  # 伤害加成（小幅提升）
+  damage-bonus: 0.5
+  # 击退力度倍数
+  knockback-multiplier: 1.2
+
+# 猫娘伤害调整设置
+neko-damage-modification:
+  # 是否启用猫娘伤害调整功能
+  enabled: true
+  # 免疫跌落伤害
+  fall-damage-immunity: true
+  # 其他伤害增加倍数（1.0为原伤害，1.8为增加0.8倍）
+  other-damage-multiplier: 1.8
+  # 调试模式，显示伤害调整信息
+  debug: false
+
+# 猫娘生物行为设置
+neko-mob-behavior:
+  # 是否启用猫娘生物行为功能
+  enabled: true
+  # 苦力怕驱赶功能
+  creeper-repulsion: true
+  # 幻翼驱赶功能
+  phantom-repulsion: true
+  # 调试模式，显示生物行为信息
+  debug: false
+
+# 猫娘爬墙功能设置
+neko-climbing:
+  # 是否启用猫娘爬墙功能
+  enabled: true
+  # 调试模式，显示爬墙信息
+  debug: false
+
+# 尾巴拉扯功能设置
+tail-pull:
+  # 是否启用尾巴拉扯功能
+  enabled: true
+  # 拉扯尾巴时的提示消息
+  pull-message: "你薅了一下{target}的尾巴"

@@ -1,0 +1,236 @@
+package org.cneko.nekox.utils;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.cneko.nekox.NextNeko;
+
+import java.util.*;
+
+public class NekoManager {
+    private final NextNeko plugin;
+    private final PlayerConfigManagerSafe configManager;
+
+    public NekoManager(NextNeko plugin) {
+        this.plugin = plugin;
+        this.configManager = (PlayerConfigManagerSafe) plugin.getPlayerConfigManager();
+    }
+
+    /**
+     * 设置玩家为猫娘
+     */
+    public void setNeko(Player player, boolean isNeko) {
+        if (player == null) {
+            throw new IllegalArgumentException("玩家参数不能为null");
+        }
+        configManager.setNeko(player, isNeko);
+    }
+
+    /**
+     * 设置玩家的尾巴拉扯功能开关状态
+     */
+    public void setTailPullEnabled(Player player, boolean enabled) {
+        if (player == null) {
+            return;
+        }
+
+        configManager.setTailPullEnabled(player, enabled);
+    }
+
+    /**
+     * 检查玩家的尾巴拉扯功能是否开启
+     */
+    public boolean isTailPullEnabled(Player player) {
+        if (player == null) {
+            return true; // 默认开启
+        }
+
+        return configManager.isTailPullEnabled(player);
+    }
+
+    /**
+     * 设置玩家为猫娘（通过玩家名）
+     */
+    public void setNekoByName(String playerName, boolean isNeko) {
+        if (playerName == null || playerName.trim().isEmpty()) {
+            throw new IllegalArgumentException("玩家名不能为null或空");
+        }
+        configManager.setNekoByName(playerName, isNeko);
+    }
+
+    /**
+     * 检查玩家是否是猫娘
+     */
+    public boolean isNeko(Player player) {
+        if (player == null) {
+            return false;
+        }
+        return configManager.isNeko(player);
+    }
+
+    /**
+     * 检查玩家是否是猫娘（通过玩家名）
+     */
+    public boolean isNeko(String playerName) {
+        if (playerName == null || playerName.trim().isEmpty()) {
+            return false;
+        }
+        return configManager.isNeko(playerName);
+    }
+
+    /**
+     * 获取所有猫娘玩家
+     */
+    public Set<Player> getNekoPlayers() {
+        Set<Player> players = new HashSet<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (isNeko(player)) {
+                players.add(player);
+            }
+        }
+        return players;
+    }
+
+    /**
+     * 获取所有猫娘玩家名（包括离线玩家）
+     */
+    public Set<String> getAllNekoNames() {
+        return configManager.getAllNekoNames();
+    }
+
+    /**
+     * 为主人添加猫娘（通过玩家对象）
+     */
+    public void addOwner(Player neko, Player owner) {
+        configManager.addOwner(neko, owner);
+    }
+
+    /**
+     * 为主人添加猫娘（通过玩家名）
+     */
+    public void addOwnerByName(String nekoName, String ownerName) {
+        configManager.addOwnerByName(nekoName, ownerName);
+    }
+
+    /**
+     * 移除主人与猫娘的关系（通过玩家对象）
+     */
+    public void removeOwner(Player neko, Player owner) {
+        configManager.removeOwner(neko, owner);
+    }
+
+    /**
+     * 移除主人与猫娘的关系（通过玩家名）
+     */
+    public void removeOwnerByName(String nekoName, String ownerName) {
+        configManager.removeOwnerDirect(nekoName, ownerName);
+    }
+    
+    /**
+     * 获取某只猫娘的所有主人
+     */
+    public Set<Player> getOwners(Player neko) {
+        return configManager.getOwners(neko);
+    }
+    
+    /**
+     * 获取某只猫娘的所有主人名（包括离线玩家）
+     */
+    public Set<String> getOwnerNames(String nekoName) {
+        return configManager.getOwnerNames(nekoName);
+    }
+    
+    /**
+     * 检查某个玩家是否是某只猫娘的主人
+     */
+    public boolean isOwner(Player owner, Player neko) {
+        return configManager.isOwner(owner, neko);
+    }
+    
+    /**
+     * 检查某个玩家是否是某只猫娘的主人（通过玩家名）
+     */
+    public boolean isOwnerOf(String ownerName, String nekoName) {
+        return configManager.isOwnerOf(ownerName, nekoName);
+    }
+    
+    /**
+     * 检查玩家是否有主人
+     */
+    public boolean hasOwner(String playerName) {
+        return configManager.hasOwner(playerName);
+    }
+    
+    /**
+     * 获取某个主人的所有猫娘
+     */
+    public Set<Player> getNekosByOwner(Player owner) {
+        return configManager.getNekosByOwner(owner);
+    }
+    
+    // 主人申请相关方法
+
+    /**
+     * 发送主人申请
+     */
+    public void sendOwnerRequest(Player requester, Player neko) {
+        configManager.sendOwnerRequest(requester, neko);
+    }
+
+    /**
+     * 检查是否有主人申请
+     */
+    public boolean hasOwnerRequest(Player requester, Player neko) {
+        return configManager.hasOwnerRequest(requester, neko);
+    }
+
+    /**
+     * 获取猫娘收到的所有申请
+     */
+    public Set<Player> getOwnerRequests(Player neko) {
+        return configManager.getOwnerRequests(neko);
+    }
+
+    /**
+     * 接受主人申请
+     */
+    public void acceptOwnerRequest(Player requester, Player neko) {
+        configManager.acceptOwnerRequest(requester, neko);
+    }
+
+    /**
+     * 拒绝主人申请
+     */
+    public void denyOwnerRequest(Player requester, Player neko) {
+        configManager.denyOwnerRequest(requester, neko);
+    }
+
+    // 新增直接操作方法，供API调用
+
+    /**
+     * 直接添加主人关系（不触发事件）
+     */
+    public void addOwnerDirect(String nekoName, String ownerName) {
+        configManager.addOwnerDirect(nekoName, ownerName);
+    }
+
+    /**
+     * 直接移除主人关系（不触发事件）
+     */
+    public void removeOwnerDirect(String nekoName, String ownerName) {
+        configManager.removeOwnerDirect(nekoName, ownerName);
+    }
+
+    /**
+     * 直接设置玩家为猫娘（不触发事件）
+     */
+    public void setNekoDirect(String playerName, boolean isNeko) {
+        configManager.setNekoDirect(playerName, isNeko);
+    }
+
+    /**
+     * 获取插件实例
+     */
+    public NextNeko getPlugin() {
+        return plugin;
+    }
+}
