@@ -65,6 +65,7 @@ public class SafeMessageUtils {
         DEFAULT_MESSAGES.put("commands.owner.target_not_neko_admin", "{player} is not a neko!");
         DEFAULT_MESSAGES.put("commands.owner.force_add_success", "Successfully added {player} as owner!");
         DEFAULT_MESSAGES.put("commands.owner.force_add_target", "{player} added you as their owner!");
+        DEFAULT_MESSAGES.put("commands.owner.circular_owner", "This would create a circular owner relationship!");
     }
     
     /**

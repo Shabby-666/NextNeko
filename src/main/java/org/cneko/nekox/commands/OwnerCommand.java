@@ -109,6 +109,12 @@ public class OwnerCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
+        // 检查是否会造成循环关系
+        if (nekoManager.wouldCreateCycle(target.getName(), player.getName())) {
+            player.sendMessage(SafeMessageUtils.getSafeMessage(languageManager, "commands.owner.circular_owner", "This would create a circular owner relationship!"));
+            return;
+        }
+
         try {
             nekoManager.sendOwnerRequest(player, target);
             player.sendMessage(SafeMessageUtils.getSafeMessage(languageManager, "commands.owner.request_sent", "Owner request sent successfully!"));
@@ -142,6 +148,12 @@ public class OwnerCommand implements CommandExecutor, TabCompleter {
 
         if (!nekoManager.hasOwnerRequest(target, player)) {
             player.sendMessage(SafeMessageUtils.getSafeMessage(languageManager, "commands.owner.no_pending_request", "No pending owner request!"));
+            return;
+        }
+
+        // 检查是否会造成循环关系（target 成为 owner，player 成为 neko）
+        if (nekoManager.wouldCreateCycle(target.getName(), player.getName())) {
+            player.sendMessage(SafeMessageUtils.getSafeMessage(languageManager, "commands.owner.circular_owner", "This would create a circular owner relationship!"));
             return;
         }
 
@@ -213,7 +225,8 @@ public class OwnerCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        if (nekoManager.isOwner(player, target)) {
+        if (nekoManager.isOwner(target, player)) {
+            // target 是 player 的主人，player 移除自己的主人
             nekoManager.removeOwner(player, target);
             HashMap<String, String> replacements1 = new HashMap<>();
             replacements1.put("player", target.getName());
@@ -223,7 +236,8 @@ public class OwnerCommand implements CommandExecutor, TabCompleter {
             replacements2.put("player", player.getName());
             String message2 = SafeMessageUtils.getSafeMessage(languageManager, "commands.owner.removed_as_owner", "You were removed as {player}'s owner!");
             target.sendMessage(SafeMessageUtils.replacePlaceholdersSafe(message2, replacements2));
-        } else if (nekoManager.isOwner(target, player)) {
+        } else if (nekoManager.isOwner(player, target)) {
+            // player 是 target 的主人，player 移除自己的猫娘
             nekoManager.removeOwner(target, player);
             HashMap<String, String> replacements3 = new HashMap<>();
             replacements3.put("player", target.getName());
@@ -302,6 +316,12 @@ public class OwnerCommand implements CommandExecutor, TabCompleter {
 
         if (nekoManager.isOwner(player, target)) {
             player.sendMessage(SafeMessageUtils.getSafeMessage(languageManager, "commands.owner.already_owner", "You are already the owner of this neko!"));
+            return;
+        }
+
+        // 检查是否会造成循环关系
+        if (nekoManager.wouldCreateCycle(target.getName(), player.getName())) {
+            player.sendMessage(SafeMessageUtils.getSafeMessage(languageManager, "commands.owner.circular_owner", "This would create a circular owner relationship!"));
             return;
         }
 

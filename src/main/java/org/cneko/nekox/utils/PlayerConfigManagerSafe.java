@@ -1073,4 +1073,56 @@ public class PlayerConfigManagerSafe {
         Set<String> ownerNames = nekoOwnersCache.get(nekoName);
         return ownerNames != null && ownerNames.contains(ownerName);
     }
+
+    /**
+     * 检查添加主人关系是否会造成循环关系（例如猫娘成为自己主人的主人）
+     * @param newNekoName 新猫娘
+     * @param newOwnerName 新主人
+     * @return true 表示会造成循环，应拒绝
+     */
+    public boolean wouldCreateCycle(String newNekoName, String newOwnerName) {
+        newNekoName = newNekoName.toLowerCase();
+        newOwnerName = newOwnerName.toLowerCase();
+
+        // 如果新猫娘已经直接或间接是新主人的主人，则添加后会形成循环
+        return hasIndirectOwnership(newNekoName, newOwnerName);
+    }
+
+    /**
+     * 递归检查 start 是否直接或间接是 target 的主人
+     * 即从 start 出发，沿着"猫娘→主人"关系，是否能到达 target
+     */
+    private boolean hasIndirectOwnership(String start, String target) {
+        if (start.equals(target)) {
+            return true;
+        }
+
+        // 检查 start 是否直接是 target 的主人
+        if (isOwnerOf(start, target)) {
+            return true;
+        }
+
+        // 获取 start 的所有猫娘，递归检查这些猫娘是否是 target 的主人
+        Set<String> nekos = getNekoNamesByOwner(start);
+        for (String neko : nekos) {
+            if (hasIndirectOwnership(neko, target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取某个主人的所有猫娘名（通过玩家名）
+     */
+    public Set<String> getNekoNamesByOwner(String ownerName) {
+        ownerName = ownerName.toLowerCase();
+        Set<String> nekos = new HashSet<>();
+        for (Map.Entry<String, Set<String>> entry : nekoOwnersCache.entrySet()) {
+            if (entry.getValue().contains(ownerName)) {
+                nekos.add(entry.getKey());
+            }
+        }
+        return nekos;
+    }
 }

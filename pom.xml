@@ -6,7 +6,7 @@
 
     <groupId>org.cneko</groupId>
     <artifactId>NextNeko</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-hotfix</version>
     <packaging>jar</packaging>
 
     <name>NextNeko-Plugin</name>

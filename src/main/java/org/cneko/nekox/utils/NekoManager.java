@@ -221,6 +221,13 @@ public class NekoManager {
     }
 
     /**
+     * 检查添加主人关系是否会造成循环关系
+     */
+    public boolean wouldCreateCycle(String nekoName, String ownerName) {
+        return configManager.wouldCreateCycle(nekoName, ownerName);
+    }
+
+    /**
      * 直接设置玩家为猫娘（不触发事件）
      */
     public void setNekoDirect(String playerName, boolean isNeko) {

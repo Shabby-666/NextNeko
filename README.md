@@ -10,7 +10,7 @@ NextNeko is a fun Minecraft plugin that makes Minecraft more interesting! It all
 
 ### Step 1: Download the Plugin
 
-1. Download the `NextNeko-1.0.0.jar` file
+1. Download the `NextNeko-1.0.1-hotfix.jar` file
 2. Place this file in your server's `plugins` folder
 
 ### Step 2: Start the Server
@@ -479,7 +479,7 @@ NextNeko是一个让Minecraft变得更有趣的插件！它可以让玩家变成
 
 ### 第1步：下载插件
 
-1. 下载 `NextNeko-1.0.0.jar` 文件
+1. 下载 `NextNeko-1.0.1-hotfix.jar` 文件
 2. 把这个文件放到你服务器的 `plugins` 文件夹里
 
 ### 第2步：启动服务器

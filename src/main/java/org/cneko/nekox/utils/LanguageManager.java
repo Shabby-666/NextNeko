@@ -150,8 +150,8 @@ public class LanguageManager {
             }
             
             // 英文配置
-            config.set("plugin.version", "Version: 1.0.0");
-            config.set("plugin.version_full", "1.0.0");
+            config.set("plugin.version", "Version: 1.0.1-hotfix");
+            config.set("plugin.version_full", "1.0.1-hotfix");
             config.set("plugin.author", "Shabby");
             config.set("plugin.github", "https://github.com/Shabby-666/NextNeko");
             
@@ -377,6 +377,7 @@ public class LanguageManager {
             config.set("commands.owner.target_not_neko_admin", "%player% is not a neko!");
             config.set("commands.owner.force_add_success", "You forcefully added %player% as your owner!");
             config.set("commands.owner.force_add_target", "%player% forcefully added you as their owner!");
+            config.set("commands.owner.circular_owner", "This would create a circular owner relationship!");
             
             // NekoSet command messages
             config.set("commands.nekoset.invalid_param", "Invalid parameter! Please use true or false.");
@@ -428,8 +429,8 @@ public class LanguageManager {
             config.set("plugin.help_info", "输入 /nextnekohelp 查看帮助");
             config.set("plugin.original_authors", "原作者");
             config.set("plugin.version_label", "版本");
-            config.set("plugin.version_full", "1.0.0");
-            config.set("plugin.version", "版本: 1.0.0");
+            config.set("plugin.version_full", "1.0.1-hotfix");
+            config.set("plugin.version", "版本: 1.0.1-hotfix");
             config.set("commands.nextneko.reloaded", "NextNeko配置已重新加载！");
             config.set("commands.language.current", "当前语言: %language%");
             config.set("commands.language.available", "可用语言: %languages%");
@@ -583,6 +584,7 @@ public class LanguageManager {
             config.set("commands.owner.target_not_neko_admin", "%player%不是猫娘！");
             config.set("commands.owner.force_add_success", "你强制将%player%添加为你的主人！");
             config.set("commands.owner.force_add_target", "%player%强制将你添加为他们的主人！");
+            config.set("commands.owner.circular_owner", "这会造成循环主人关系！");
             
             // NekoSet命令消息
             config.set("commands.nekoset.invalid_param", "参数无效！请使用true或false。");
