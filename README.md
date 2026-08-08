@@ -298,7 +298,7 @@ cat-nip:
 - `/nextneko language language` - Switch plugin language
 - `/nextneko placeholders` - Display all available NextNeko placeholders
 
-## New Features in Emergency-fix Version
+## New Features & Improvements
 
 ### 📋 Placeholder System Improvements
 
@@ -464,6 +464,23 @@ If you encounter problems:
 - Leather armor provides speed bonus to nekos
 - Catnip gives temporary speed and jump boost to nekos
 - Low health automatically triggers stress response for extra power
+
+## Integration with NekoEssentialsX+
+
+NextNeko deeply integrates with [NekoEssentialsX+](https://github.com/Shabby-666/NekoEssentialsX-Plus). Just place both plugins in the `plugins` folder and everything works automatically (no extra configuration needed).
+
+### Chat Format Coordination
+- When NekoEssentialsX+ is detected as installed and enabled, NextNeko **stops forcing** its own neko chat prefix/format
+- Chat presentation is handled by NekoEssentialsX+; neko players can equip/unequip the **「猫娘」** (Neko) title freely from its main menu
+- If NekoEssentialsX+ is not installed, NextNeko falls back to its built-in chat prefix/suffix
+
+### Neko Title
+- NekoEssentialsX+ automatically reads `neko-chat.prefix` from NextNeko's config and registers it as a wearable **「猫娘」** title (ID: `nextneko`)
+- Neko players receive this title automatically when joining or opening the NekoEssentialsX+ main menu (not forced on)
+
+### Owner-Neko Management via GUI
+- NekoEssentialsX+ provides a **「主人与猫娘管理」** (Owner & Neko) menu in its main GUI to view/manage owner-Neko relationships
+- It also offers a **「NextNeko设置」** (NextNeko Settings) GUI for admins to toggle NextNeko features (chat, meat-only, catnip, claws, armor bonus, night effects, climbing, tail-pull, etc.) without editing config.yml manually
 
 ---
 
@@ -819,6 +836,23 @@ cat-nip:
 - `night-effects`: 夜间效果设置
   - `nightvision-duration`: 夜视效果持续时间（秒），夜间循环刷新，白天移除
   - `check-interval`: 效果检查间隔（秒）
+
+## 与 NekoEssentialsX+ 的集成
+
+NextNeko 与 [NekoEssentialsX+](https://github.com/Shabby-666/NekoEssentialsX-Plus) 深度联动，两个插件同时放入 `plugins` 文件夹即可自动生效，无需额外配置。
+
+### 聊天格式协调
+- 当检测到 NekoEssentialsX+ 已安装并启用时，NextNeko **不再强制**设置自己的猫娘聊天前缀/格式
+- 聊天展示交由 NekoEssentialsX+ 统一处理，猫娘玩家可在其主菜单中自行佩戴/卸下 **「猫娘」** 头衔
+- 若未安装 NekoEssentialsX+，NextNeko 回退使用内置的猫娘聊天前缀/后缀
+
+### 猫娘头衔
+- NekoEssentialsX+ 会自动读取 NextNeko 配置的 `neko-chat.prefix`，注册为可佩戴的 **「猫娘」** 头衔（ID: `nextneko`）
+- 猫娘玩家登录或打开 NekoEssentialsX+ 主菜单时会自动获得该头衔（不强制佩戴）
+
+### GUI 管理
+- NekoEssentialsX+ 主菜单提供 **「主人与猫娘管理」** 界面，可查看/管理主人-猫娘关系
+- 并提供 **「NextNeko设置」** 管理界面，管理员可直接在箱子GUI中开关 NextNeko 的功能（猫娘聊天、只吃肉类、猫薄荷、猫爪、护甲加成、夜间效果、爬墙、尾巴拉扯等），无需手动编辑 config.yml
 
 ## 如何构建
 
