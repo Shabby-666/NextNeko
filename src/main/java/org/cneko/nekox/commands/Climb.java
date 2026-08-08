@@ -127,6 +127,31 @@ public class Climb implements CommandExecutor, TabCompleter {
     public boolean getClimbStatus(Player player) {
         return climbStatus.getOrDefault(player.getName(), true);
     }
+
+    /**
+     * 直接设置玩家的爬墙状态（供 GUI / 其它插件调用）
+     */
+    public void setClimbStatus(Player player, boolean enabled) {
+        if (player == null) {
+            return;
+        }
+        climbStatus.put(player.getName(), enabled);
+        if (!enabled) {
+            player.removePotionEffect(PotionEffectType.LEVITATION);
+        }
+    }
+
+    /**
+     * 切换玩家的爬墙状态（供 GUI / 其它插件调用）
+     */
+    public boolean toggleClimb(Player player) {
+        if (player == null) {
+            return false;
+        }
+        boolean newStatus = !getClimbStatus(player);
+        setClimbStatus(player, newStatus);
+        return newStatus;
+    }
     
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {

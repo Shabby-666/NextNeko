@@ -25,6 +25,12 @@ public class NekoChat implements Listener {
         if (!config.getBoolean("neko-chat.enabled", true)) {
             return;
         }
+
+        // 如果安装了 NekoEssentialX，聊天前缀与格式交由 NekoEssentialX 处理，
+        // 不再强制设置聊天格式（猫娘可自行在 NekoEssentialX 的UI中佩戴/切换头衔）
+        if (plugin.isNekoEssentialsXInstalled()) {
+            return;
+        }
         
         Player player = event.getPlayer();
         

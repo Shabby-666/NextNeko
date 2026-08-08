@@ -1,5 +1,5 @@
 name: NextNeko
-version: 1.0.1-hotfix
+version: 1.1.0-beta
 authors: [_Chinese_Player_]
 description: 一个融合了NekoC和toNeko功能的猫娘插件
 main: org.cneko.nekox.NextNeko

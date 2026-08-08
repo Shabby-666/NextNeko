@@ -36,7 +36,7 @@ public class NextNekoCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             // 添加空值检查，确保消息不会返回null
             String pluginName = getSafeMessage("plugin.name", "NextNeko");
-            String pluginVersion = getSafeMessage("plugin.version", "Version: 1.0.1-hotfix");
+            String pluginVersion = getSafeMessage("plugin.version", "Version: 1.1.0-beta");
             String chineseAuthor = getSafeMessage("plugin.chinese_author", "This modified version author: _Chinese_Player_");
             String helpInfo = getSafeMessage("plugin.help_info", "Type /nextnekohelp for help");
             String originalAuthors = getSafeMessage("plugin.original_authors", "Original Authors");
@@ -70,7 +70,7 @@ public class NextNekoCommand implements CommandExecutor, TabCompleter {
             case "v":
                 String name = getSafeMessage("plugin.name", "NextNeko");
                 String versionLabel = getSafeMessage("plugin.version_label", "Version");
-                String versionFull = getSafeMessage("plugin.version_full", "1.0.1-hotfix");
+                String versionFull = getSafeMessage("plugin.version_full", "1.1.0-beta");
                 // 为版本消息添加前缀
                 sender.sendMessage("§dNextNeko §e>> §6" + name + " " + versionLabel + " §e" + versionFull);
                 break;

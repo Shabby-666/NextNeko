@@ -150,8 +150,8 @@ public class LanguageManager {
             }
             
             // 英文配置
-            config.set("plugin.version", "Version: 1.0.1-hotfix");
-            config.set("plugin.version_full", "1.0.1-hotfix");
+            config.set("plugin.version", "Version: 1.1.0-beta");
+            config.set("plugin.version_full", "1.1.0-beta");
             config.set("plugin.author", "Shabby");
             config.set("plugin.github", "https://github.com/Shabby-666/NextNeko");
             
@@ -217,6 +217,11 @@ public class LanguageManager {
             config.set("commands.attackboost.name", "Passive Attack Boost");
             config.set("commands.attackboost.type", "Passive Skill");
             config.set("commands.attackboost.description", "Description: Slightly increased attack damage and knockback power");
+            
+            // 主人血量过低自动恢复
+            config.set("commands.ownerhealth.name", "Owner Health Restore");
+            config.set("commands.ownerhealth.type", "Passive Skill");
+            config.set("commands.ownerhealth.description", "Description: Automatically restore health for your owner when below {threshold} HP");
             
             // 伤害调整功能消息
             config.set("damage.adjustment.message", "Damage adjustment: %.1f → %.1f (Reason: %s, Multiplier: %.1f)");
@@ -429,8 +434,8 @@ public class LanguageManager {
             config.set("plugin.help_info", "输入 /nextnekohelp 查看帮助");
             config.set("plugin.original_authors", "原作者");
             config.set("plugin.version_label", "版本");
-            config.set("plugin.version_full", "1.0.1-hotfix");
-            config.set("plugin.version", "版本: 1.0.1-hotfix");
+            config.set("plugin.version_full", "1.1.0-beta");
+            config.set("plugin.version", "版本: 1.1.0-beta");
             config.set("commands.nextneko.reloaded", "NextNeko配置已重新加载！");
             config.set("commands.language.current", "当前语言: %language%");
             config.set("commands.language.available", "可用语言: %languages%");
@@ -485,6 +490,11 @@ public class LanguageManager {
             config.set("commands.attackboost.name", "被动攻击增强");
             config.set("commands.attackboost.type", "被动技能");
             config.set("commands.attackboost.description", "描述: 小幅提升攻击伤害和击退力度");
+            
+            // 主人血量过低自动恢复
+            config.set("commands.ownerhealth.name", "主人自动恢复");
+            config.set("commands.ownerhealth.type", "被动技能");
+            config.set("commands.ownerhealth.description", "描述: 当主人生命值低于{threshold}点时，自动为你的主人恢复生命");
             
             // 伤害调整功能消息
             config.set("damage.adjustment.message", "伤害调整：%.1f → %.1f (原因：%s, 倍数：%.1f)");

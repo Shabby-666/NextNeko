@@ -14,7 +14,8 @@ public class SkillManager {
     
     public enum SkillType {
         HEALTH_RESTORE, // 主动技能：生命恢复
-        STRESS_PASSIVE // 被动技能：应激反应
+        STRESS_PASSIVE, // 被动技能：应激反应
+        HEALTH_RESTORE_PASSIVE // 被动技能：主人血量过低自动恢复
     }
     
     public SkillManager(NextNeko plugin) {
@@ -76,6 +77,8 @@ public class SkillManager {
         switch (skillType) {
             case HEALTH_RESTORE:
                 return plugin.getConfig().getInt("health-skill.cooldown", 60) * 1000L;
+            case HEALTH_RESTORE_PASSIVE:
+                return plugin.getConfig().getInt("owner-health.cooldown", 60) * 1000L;
             case STRESS_PASSIVE:
                 return 300 * 1000L; // 应激被动冷却5分钟
             default:

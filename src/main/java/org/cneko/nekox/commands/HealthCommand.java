@@ -80,6 +80,24 @@ public class HealthCommand implements CommandExecutor {
         return true;
     }
     
+    /**
+     * 自动触发恢复技能（主人血量过低时由监听器调用）
+     * 不消耗饱食度、不设置冷却，因此不影响猫娘手动使用 /health。
+     */
+    public void autoTriggerRestore(Player neko) {
+        if (neko == null || !neko.isOnline() || neko.isDead()) {
+            return;
+        }
+        if (!nekoManager.isNeko(neko)) {
+            return;
+        }
+        java.util.Set<Player> owners = nekoManager.getOwners(neko);
+        if (owners.isEmpty()) {
+            return;
+        }
+        applyHealthRestore(neko, owners);
+    }
+
     private void applyHealthRestore(Player neko, java.util.Set<Player> owners) {
         int maxLevel = plugin.getConfig().getInt("health-skill.max-level", 5);
         

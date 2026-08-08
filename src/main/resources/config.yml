@@ -90,6 +90,8 @@ owner-death:
   keep-inventory: true
   # 猫娘死亡时是否保留等级经验
   keep-level: true
+  # 主人死亡时发送给猫娘的提示消息（支持颜色代码 & 和 §）
+  message: "&c你的主人已死亡，你也随之倒下了..."
 
 # 健康恢复技能设置
 health-skill:
@@ -99,6 +101,17 @@ health-skill:
   hunger-cost: 4
   # 最大恢复等级
   max-level: 5
+
+# 主人血量过低自动恢复设置
+owner-health:
+  feature:
+    # 是否启用主人血量低于6时猫娘自动触发恢复技能
+    # 自动触发不消耗饱食度、不进入冷却
+    enabled: true
+  # 触发自动恢复的血量阈值
+  threshold: 6
+  # 自动恢复被动技能的冷却时间(秒)，与主动/health冷却独立
+  cooldown: 60
 
 # 夜间效果设置
 night-effects:

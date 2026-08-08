@@ -57,6 +57,7 @@ public class MySkillsCommand implements CommandExecutor {
         
         // 显示被动技能
         player.sendMessage("§a【被动技能】");
+        showOwnerHealthSkill(player);
         showStressEffectSkill(player);
         showAttackBoostSkill(player);
         
@@ -87,6 +88,29 @@ public class MySkillsCommand implements CommandExecutor {
         player.sendMessage("  §f" + SafeMessageUtils.replacePlaceholdersSafe(SafeMessageUtils.getRawMessage(languageManager, "commands.health.cost", "Hunger Cost: {cost}"), replacements));
     }
     
+    /**
+     * 显示主人血量过低自动恢复被动技能信息
+     */
+    private void showOwnerHealthSkill(Player player) {
+        boolean onCooldown = skillManager.isSkillOnCooldown(player, SkillManager.SkillType.HEALTH_RESTORE_PASSIVE);
+        long remainingCooldown = skillManager.getRemainingCooldown(player, SkillManager.SkillType.HEALTH_RESTORE_PASSIVE);
+        int threshold = plugin.getConfig().getInt("owner-health.threshold", 6);
+
+        player.sendMessage("§e- " + SafeMessageUtils.getRawMessage(languageManager, "commands.ownerhealth.name", "Owner Health Restore") + " §f- " + SafeMessageUtils.getRawMessage(languageManager, "commands.ownerhealth.type", "Passive"));
+
+        HashMap<String, String> replacements = new HashMap<>();
+        replacements.put("threshold", String.valueOf(threshold));
+        player.sendMessage("  §f" + SafeMessageUtils.replacePlaceholdersSafe(SafeMessageUtils.getRawMessage(languageManager, "commands.ownerhealth.description", "Automatically restore health for your owner when below {threshold} HP"), replacements));
+
+        replacements.clear();
+        if (onCooldown) {
+            replacements.put("time", String.valueOf(remainingCooldown));
+            player.sendMessage("  §f" + SafeMessageUtils.getRawMessage(languageManager, "commands.myskills.cooldown-label", "Cooldown: ") + "§c" + SafeMessageUtils.replacePlaceholdersSafe(SafeMessageUtils.getRawMessage(languageManager, "commands.myskills.cooldown", "{time} seconds remaining"), replacements));
+        } else {
+            player.sendMessage("  §f" + SafeMessageUtils.getRawMessage(languageManager, "commands.myskills.cooldown-label", "Cooldown: ") + "§a" + SafeMessageUtils.getRawMessage(languageManager, "commands.myskills.available", "Available"));
+        }
+    }
+
     /**
      * 显示应激效果技能信息
      */

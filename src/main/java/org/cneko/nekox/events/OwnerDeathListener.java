@@ -30,25 +30,34 @@ public class OwnerDeathListener implements Listener {
             return;
         }
 
-        Player owner = event.getEntity();
-        if (dyingPlayers.contains(owner.getUniqueId())) {
+        Player dead = event.getEntity();
+
+        // 如果是上一轮被"主人死亡连锁"杀掉的猫娘，其死亡事件会再次进入本监听器。
+        // 此时只移除其标记（避免缓存泄漏导致后续死亡无法连锁），不再进一步连锁其自己的猫娘。
+        if (dyingPlayers.contains(dead.getUniqueId())) {
+            dyingPlayers.remove(dead.getUniqueId());
             return;
         }
 
-        Set<Player> nekos = nekoManager.getNekosByOwner(owner);
+        Set<Player> nekos = nekoManager.getNekosByOwner(dead);
         if (nekos.isEmpty()) {
             return;
         }
+
+        String deathMessage = config.getString("owner-death.message", "&c你的主人已死亡，你也随之倒下了...")
+                .replace("&", "§");
 
         for (Player neko : nekos) {
             if (dyingPlayers.contains(neko.getUniqueId())) {
                 continue;
             }
             dyingPlayers.add(neko.getUniqueId());
-            neko.sendMessage("§c你的主人已死亡，你也随之倒下了...");
+            neko.sendMessage(deathMessage);
             neko.setHealth(0.0);
+            // 安全网：正常情况下猫娘死亡会触发自己的 PlayerDeathEvent 并清理标记。
+            // 若其死亡被其他插件拦截（如 god 模式），延迟清理标记，避免永久泄漏导致后续死亡无法连锁。
+            final java.util.UUID nekoUuid = neko.getUniqueId();
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> dyingPlayers.remove(nekoUuid), 5L);
         }
-
-        dyingPlayers.remove(owner.getUniqueId());
     }
 }

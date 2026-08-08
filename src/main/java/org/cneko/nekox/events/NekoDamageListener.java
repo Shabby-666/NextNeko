@@ -38,14 +38,20 @@ public class NekoDamageListener implements Listener {
         
         // 获取伤害原因
         EntityDamageEvent.DamageCause cause = event.getCause();
-        
+
         // 免疫跌落伤害
         if (cause == EntityDamageEvent.DamageCause.FALL && 
             plugin.getConfig().getBoolean("neko-damage-modification.fall-damage-immunity", true)) {
             event.setCancelled(true);
             return;
         }
-        
+
+        // 命令造成的击杀伤害（Essentials /kill 使用 SUICIDE/CUSTOM）不被取消、不被倍数放大，
+        // 否则 Float.MAX_VALUE 会被放大成 Infinity，导致玩家无法被 /kill 直接杀死。
+        if (cause == EntityDamageEvent.DamageCause.SUICIDE || cause == EntityDamageEvent.DamageCause.CUSTOM) {
+            return;
+        }
+
         // 其他伤害增加倍数
         double damageMultiplier = plugin.getConfig().getDouble("neko-damage-modification.other-damage-multiplier", 1.8);
         

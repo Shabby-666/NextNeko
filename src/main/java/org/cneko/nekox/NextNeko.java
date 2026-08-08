@@ -30,6 +30,7 @@ import org.cneko.nekox.events.MeatOnly;
 import org.cneko.nekox.events.CatNip;
 import org.cneko.nekox.events.Claws;
 import org.cneko.nekox.events.OwnerDeathListener;
+import org.cneko.nekox.events.OwnerHealthListener;
 import org.cneko.nekox.events.NightEffectsListener;
 import org.cneko.nekox.events.StressEffectListener;
 import org.cneko.nekox.events.PassiveAttackBoost;
@@ -45,6 +46,11 @@ import org.cneko.nekox.utils.LanguageManager;
 import org.cneko.nekox.utils.NextNekoPlaceholderExpansion;
 import org.cneko.nekox.utils.PlayerConfigManagerSafe;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +62,8 @@ public class NextNeko extends JavaPlugin {
     private LanguageManager languageManager;
     private PlayerConfigManagerSafe playerConfigManager;
     private Climb climbCommand; // 添加爬墙命令引用
+    private boolean nekoEssentialsXDetected;
+    private int nekoEssentialsXCheckCount;
     
     // 保存已注册的监听器和命令引用，以便在插件禁用时注销它们
     private final List<Object> registeredListeners = new ArrayList<>();
@@ -67,7 +75,7 @@ public class NextNeko extends JavaPlugin {
         
         try {
             // 加载配置
-            saveDefaultConfig();
+            releaseDefaultConfig();
             
             // 按顺序初始化核心组件，确保每个组件都成功初始化
             if (!initializeComponents()) {
@@ -78,6 +86,9 @@ public class NextNeko extends JavaPlugin {
             
             // 配置已加载，使用languageManager发送消息
             getLogger().info(languageManager.getMessage("plugin.config_loaded"));
+
+            // 检测 NekoEssentialX 插件（延迟到所有插件加载完成后）
+            Bukkit.getScheduler().runTaskLater(this, () -> detectNekoEssentialsX(), 40L);
 
             // 注册事件监听器
             try {
@@ -186,6 +197,40 @@ public class NextNeko extends JavaPlugin {
         }
     }
     
+    /**
+     * 安全地释放默认配置文件。
+     * 解决：数据文件夹存在但 config.yml 缺失时，原 saveDefaultConfig() 可能生成空文件的问题。
+     * 做法：先确保数据文件夹存在，再从 Jar 资源中复制默认配置，并校验写出内容非空。
+     */
+    private void releaseDefaultConfig() {
+        File dataFolder = getDataFolder();
+        if (!dataFolder.exists() && !dataFolder.mkdirs()) {
+            getLogger().warning("无法创建插件数据文件夹，将保持默认配置： " + dataFolder.getAbsolutePath());
+            return;
+        }
+
+        File configFile = new File(dataFolder, "config.yml");
+        // 配置已存在且非空时，无需覆盖（保留玩家修改）
+        if (configFile.exists() && configFile.length() > 0) {
+            return;
+        }
+
+        try (InputStream in = getResource("config.yml")) {
+            if (in == null) {
+                getLogger().severe("Jar 内未找到默认配置文件 config.yml");
+                return;
+            }
+            Files.copy(in, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            if (configFile.length() <= 0) {
+                getLogger().warning("默认配置 config.yml 写入后为空，请检查 Jar 资源");
+            } else {
+                getLogger().info("已释放默认配置 config.yml");
+            }
+        } catch (IOException e) {
+            getLogger().severe("释放默认配置 config.yml 失败: " + e.getMessage());
+        }
+    }
+
     @Override
     public void onDisable() {
         // 注销所有已注册的监听器
@@ -219,6 +264,39 @@ public class NextNeko extends JavaPlugin {
         getLogger().info(languageManager.getMessage("plugin.disabled"));
     }
     
+    /**
+     * 检测 NekoEssentialX 插件是否已安装，并在启动日志中提示
+     */
+    private void detectNekoEssentialsX() {
+        // 如果 NekoEssentialX 尚未启用，稍后再次检测（应对插件加载顺序差异，最多重试6次）
+        if (!isNekoEssentialsXInstalled()) {
+            if (nekoEssentialsXCheckCount >= 6) {
+                getLogger().info("未检测到 NekoEssentialX 插件，继续使用内置的猫娘聊天前缀功能。");
+                return;
+            }
+            nekoEssentialsXCheckCount++;
+            Bukkit.getScheduler().runTaskLater(this, () -> detectNekoEssentialsX(), 60L);
+            return;
+        }
+        if (nekoEssentialsXDetected) {
+            return;
+        }
+        nekoEssentialsXDetected = true;
+        getLogger().info("==============================================");
+        getLogger().info("检测到 NekoEssentialX 插件！");
+        getLogger().info("聊天前缀已不再强制使用，猫娘玩家可在 NekoEssentialX 的主菜单中");
+        getLogger().info("自行佩戴/卸下【猫娘】头衔，聊天格式优先使用 NekoEssentialX 的格式。");
+        getLogger().info("==============================================");
+    }
+
+    /**
+     * 检查 NekoEssentialX 插件是否已安装并启用
+     */
+    public boolean isNekoEssentialsXInstalled() {
+        org.bukkit.plugin.Plugin nekoEss = Bukkit.getPluginManager().getPlugin("NekoEssentialX");
+        return nekoEss != null && nekoEss.isEnabled();
+    }
+
     private void registerEvents() {
         // 注册所有事件监听器
         registeredListeners.add(new ArmorEvent(this));
@@ -233,6 +311,7 @@ public class NextNeko extends JavaPlugin {
         registeredListeners.add(new NekoMobBehaviorListener(this));
         registeredListeners.add(new NightEffectsListener(this));
         registeredListeners.add(new OwnerDeathListener(this));
+        registeredListeners.add(new OwnerHealthListener(this));
         registeredListeners.add(new PassiveAttackBoost(this));
         registeredListeners.add(new PlayerProximityListener(this));
         registeredListeners.add(new StressEffectListener(this));
