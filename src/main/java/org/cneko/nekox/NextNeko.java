@@ -271,7 +271,7 @@ public class NextNeko extends JavaPlugin {
         // 如果 NekoEssentialX 尚未启用，稍后再次检测（应对插件加载顺序差异，最多重试6次）
         if (!isNekoEssentialsXInstalled()) {
             if (nekoEssentialsXCheckCount >= 6) {
-                getLogger().info("未检测到 NekoEssentialX 插件，继续使用内置的猫娘聊天前缀功能。");
+                getLogger().info("未检测到 NekoEssentialsX+ 插件，继续使用内置的猫娘聊天前缀功能。");
                 return;
             }
             nekoEssentialsXCheckCount++;
@@ -283,9 +283,9 @@ public class NextNeko extends JavaPlugin {
         }
         nekoEssentialsXDetected = true;
         getLogger().info("==============================================");
-        getLogger().info("检测到 NekoEssentialX 插件！");
-        getLogger().info("聊天前缀已不再强制使用，猫娘玩家可在 NekoEssentialX 的主菜单中");
-        getLogger().info("自行佩戴/卸下【猫娘】头衔，聊天格式优先使用 NekoEssentialX 的格式。");
+        getLogger().info("检测到 NekoEssentialsX+ 插件！");
+        getLogger().info("聊天前缀已不再强制使用，猫娘玩家可在 NekoEssentialsX+ 的主菜单中");
+        getLogger().info("自行佩戴/卸下【猫娘】头衔，聊天格式优先使用 NekoEssentialsX+ 的格式。");
         getLogger().info("==============================================");
     }
 
@@ -293,7 +293,7 @@ public class NextNeko extends JavaPlugin {
      * 检查 NekoEssentialX 插件是否已安装并启用
      */
     public boolean isNekoEssentialsXInstalled() {
-        org.bukkit.plugin.Plugin nekoEss = Bukkit.getPluginManager().getPlugin("NekoEssentialX");
+        org.bukkit.plugin.Plugin nekoEss = Bukkit.getPluginManager().getPlugin("NekoEssentialsXPlus");
         return nekoEss != null && nekoEss.isEnabled();
     }
 
