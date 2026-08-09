@@ -10,9 +10,6 @@ import org.cneko.nekox.NextNeko;
 import org.cneko.nekox.utils.LanguageManager;
 import org.cneko.nekox.utils.NekoManager;
 import org.cneko.nekox.utils.SafeMessageUtils;
-import org.cneko.nekox.utils.VersionUtils;
-import org.bukkit.World;
-import org.bukkit.potion.PotionEffect;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,27 +55,8 @@ public class NekoSetCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         
-        // 设置玩家的猫娘状态
+        // 设置玩家的猫娘状态（效果由 NekoManager 统一处理：取消时立即清buff，夜晚设猫娘时立即给予）
         nekoManager.setNeko(target, isNeko);
-        
-        // 如果设置为人类，立即移除夜间效果
-        if (!isNeko) {
-            target.removePotionEffect(VersionUtils.getNightVisionEffect());
-            target.removePotionEffect(VersionUtils.getSpeedEffect());
-            target.removePotionEffect(VersionUtils.getJumpBoostEffect());
-        } else {
-            // 如果设置为猫娘且当前是夜晚，立即给予夜间效果
-            var config = plugin.getConfig();
-            long startTime = config.getLong("night-effects.start-time", 13000);
-            long endTime = config.getLong("night-effects.end-time", 23000);
-            World world = target.getWorld();
-            long time = world.getTime();
-            if (time >= startTime && time <= endTime) {
-                target.addPotionEffect(new PotionEffect(VersionUtils.getNightVisionEffect(), 999999, 0, false, false));
-                target.addPotionEffect(new PotionEffect(VersionUtils.getSpeedEffect(), 999999, 0, false, false));
-                target.addPotionEffect(new PotionEffect(VersionUtils.getJumpBoostEffect(), 999999, 0, false, false));
-            }
-        }
         
         boolean changed = true; // 假设总是成功，因为异步操作无法立即返回结果
         

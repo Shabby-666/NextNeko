@@ -2,6 +2,7 @@ package org.cneko.nekox.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.cneko.nekox.NextNeko;
 
 import java.util.*;
@@ -23,6 +24,21 @@ public class NekoManager {
             throw new IllegalArgumentException("玩家参数不能为null");
         }
         configManager.setNeko(player, isNeko);
+        applyNekoEffects(player, isNeko);
+    }
+
+    /**
+     * 设置玩家为猫娘（通过玩家名）
+     */
+    public void setNekoByName(String playerName, boolean isNeko) {
+        if (playerName == null || playerName.trim().isEmpty()) {
+            throw new IllegalArgumentException("玩家名不能为null或空");
+        }
+        configManager.setNekoByName(playerName, isNeko);
+        Player player = Bukkit.getPlayerExact(playerName);
+        if (player != null) {
+            applyNekoEffects(player, isNeko);
+        }
     }
 
     /**
@@ -45,16 +61,6 @@ public class NekoManager {
         }
 
         return configManager.isTailPullEnabled(player);
-    }
-
-    /**
-     * 设置玩家为猫娘（通过玩家名）
-     */
-    public void setNekoByName(String playerName, boolean isNeko) {
-        if (playerName == null || playerName.trim().isEmpty()) {
-            throw new IllegalArgumentException("玩家名不能为null或空");
-        }
-        configManager.setNekoByName(playerName, isNeko);
     }
 
     /**
@@ -231,7 +237,41 @@ public class NekoManager {
      * 直接设置玩家为猫娘（不触发事件）
      */
     public void setNekoDirect(String playerName, boolean isNeko) {
+        if (playerName == null || playerName.trim().isEmpty()) {
+            return;
+        }
         configManager.setNekoDirect(playerName, isNeko);
+        Player player = Bukkit.getPlayerExact(playerName);
+        if (player != null) {
+            applyNekoEffects(player, isNeko);
+        }
+    }
+
+    /**
+     * 根据猫娘状态同步设置或移除夜间效果
+     * 取消猫娘身份时立即清除残留的夜间buff，设置为猫娘且当前为夜晚时立即给予buff
+     */
+    private void applyNekoEffects(Player player, boolean isNeko) {
+        if (player == null) {
+            return;
+        }
+        if (!isNeko) {
+            player.removePotionEffect(VersionUtils.getNightVisionEffect());
+            player.removePotionEffect(VersionUtils.getSpeedEffect());
+            player.removePotionEffect(VersionUtils.getJumpBoostEffect());
+            return;
+        }
+        if (!plugin.getConfig().getBoolean("night-effects.enabled", true)) {
+            return;
+        }
+        long startTime = plugin.getConfig().getLong("night-effects.start-time", 13000);
+        long endTime = plugin.getConfig().getLong("night-effects.end-time", 23000);
+        long time = player.getWorld().getTime();
+        if (time >= startTime && time <= endTime) {
+            player.addPotionEffect(new PotionEffect(VersionUtils.getNightVisionEffect(), 999999, 0, false, false));
+            player.addPotionEffect(new PotionEffect(VersionUtils.getSpeedEffect(), 999999, 0, false, false));
+            player.addPotionEffect(new PotionEffect(VersionUtils.getJumpBoostEffect(), 999999, 0, false, false));
+        }
     }
 
     /**
