@@ -13,11 +13,38 @@ import org.bukkit.potion.PotionEffectType;
 import org.cneko.nekox.NextNeko;
 import org.cneko.nekox.utils.VersionUtils;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class CatNip implements Listener {
     private final NextNeko plugin;
-    
+    private static final Map<UUID, Long> activeCatnip = new ConcurrentHashMap<>();
+
     public CatNip(NextNeko plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * 猫薄荷效果放大器（Speed/JumpBoost 等级）
+     */
+    public static int getCatnipAmplifier() {
+        return 1;
+    }
+
+    /**
+     * 检查玩家是否有生效中的猫薄荷效果
+     */
+    public static boolean isCatnipActive(Player player) {
+        Long until = activeCatnip.get(player.getUniqueId());
+        if (until == null) {
+            return false;
+        }
+        if (System.currentTimeMillis() < until) {
+            return true;
+        }
+        activeCatnip.remove(player.getUniqueId());
+        return false;
     }
     
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -59,6 +86,8 @@ public class CatNip implements Listener {
         
         // 应用猫薄荷效果
         int duration = config.getInt("cat-nip.duration", 60) * 20; // 转换为刻
+        long until = System.currentTimeMillis() + (duration * 50L);
+        activeCatnip.put(player.getUniqueId(), until);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, duration, 1, false, false));
                 player.addPotionEffect(new PotionEffect(VersionUtils.getJumpBoostEffect(), duration, 1, false, false));
         

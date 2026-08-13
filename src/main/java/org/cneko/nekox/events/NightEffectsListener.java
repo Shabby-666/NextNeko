@@ -52,16 +52,25 @@ public class NightEffectsListener implements Listener {
             World playerWorld = player.getWorld();
             long time = playerWorld.getTime();
             boolean isNight = (time >= startTime && time <= endTime);
+            boolean catnipActive = CatNip.isCatnipActive(player);
 
             if (!isNight) {
+                // 白天：只清除夜视；猫薄荷生效时保留速度/跳跃
                 player.removePotionEffect(VersionUtils.getNightVisionEffect());
-                player.removePotionEffect(VersionUtils.getSpeedEffect());
-                player.removePotionEffect(VersionUtils.getJumpBoostEffect());
+                if (!catnipActive) {
+                    player.removePotionEffect(VersionUtils.getSpeedEffect());
+                    player.removePotionEffect(VersionUtils.getJumpBoostEffect());
+                }
             } else {
                 int level = calculateEffectLevel(time, startTime, endTime, peakTime, maxLevel);
+                // 猫薄荷生效时，等级与夜间buff相加
+                int amplifier = level - 1;
+                if (catnipActive) {
+                    amplifier += CatNip.getCatnipAmplifier();
+                }
                 player.addPotionEffect(new PotionEffect(VersionUtils.getNightVisionEffect(), 300, 0, false, false));
-                player.addPotionEffect(new PotionEffect(VersionUtils.getSpeedEffect(), 300, level - 1, false, false));
-                player.addPotionEffect(new PotionEffect(VersionUtils.getJumpBoostEffect(), 300, level - 1, false, false));
+                player.addPotionEffect(new PotionEffect(VersionUtils.getSpeedEffect(), 300, amplifier, false, false));
+                player.addPotionEffect(new PotionEffect(VersionUtils.getJumpBoostEffect(), 300, amplifier, false, false));
             }
         }
     }
