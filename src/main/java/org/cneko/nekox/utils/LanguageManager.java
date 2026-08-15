@@ -150,8 +150,8 @@ public class LanguageManager {
             }
             
             // 英文配置
-            config.set("plugin.version", "Version: 1.1.0-beta");
-            config.set("plugin.version_full", "1.1.0-beta");
+            config.set("plugin.version", "Version: 1.2.2-beta");
+            config.set("plugin.version_full", "1.2.2-beta");
             config.set("plugin.author", "Shabby");
             config.set("plugin.github", "https://github.com/Shabby-666/NextNeko");
             
@@ -434,8 +434,8 @@ public class LanguageManager {
             config.set("plugin.help_info", "输入 /nextnekohelp 查看帮助");
             config.set("plugin.original_authors", "原作者");
             config.set("plugin.version_label", "版本");
-            config.set("plugin.version_full", "1.1.0-beta");
-            config.set("plugin.version", "版本: 1.1.0-beta");
+            config.set("plugin.version_full", "1.2.2-beta");
+            config.set("plugin.version", "版本: 1.2.2-beta");
             config.set("commands.nextneko.reloaded", "NextNeko配置已重新加载！");
             config.set("commands.language.current", "当前语言: %language%");
             config.set("commands.language.available", "可用语言: %languages%");
